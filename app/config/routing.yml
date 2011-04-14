@@ -1,0 +1,7 @@
+_welcome:
+    resource: "@AcmeDemoBundle/Controller/WelcomeController.php"
+    type:     annotation
+
+ppsystem:
+    resource: "@PPSystemMainBundle/Resources/config/routing.yml"
+    prefix:   /ppsystem

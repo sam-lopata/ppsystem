@@ -1,0 +1,24 @@
+{% extends 'PPSystemMainBundle::layout.html.twig' %}
+
+{% block title %}Symfony - Welcome{% endblock %}
+
+{% block content %}
+You searched for: {{ query }}
+<br>
+<form action="#" method="post">
+    {{ form_field(form) }}
+
+    <input type="submit" value="Send!" />
+</form>
+
+{% if results is defined %}
+<div id="results">
+	{% for item in results %}
+		{{ item.url }}
+	{% else %}
+		No results
+	{% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
