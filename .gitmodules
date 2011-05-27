@@ -1,0 +1,6 @@
+[submodule "vendor/bundles/Everzet/JadeBundle"]
+	path = vendor/bundles/Everzet/JadeBundle
+	url = git://github.com/everzet/EverzetJadeBundle.git
+[submodule "vendor/jade.php"]
+	path = vendor/jade.php
+	url = git://github.com/everzet/jade.php
