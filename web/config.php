@@ -4,11 +4,13 @@ if (!isset($_SERVER['HTTP_HOST'])) {
     die('This script cannot be run from the CLI. Run it from a browser.');
 }
 
-/*
-if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
+if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
+    '127.0.0.1',
+    '::1',
+))) {
+    header('HTTP/1.0 403 Forbidden');
     die('This script is only accessible from localhost.');
 }
-*/
 
 $majorProblems = array();
 $minorProblems = array();
@@ -63,16 +65,20 @@ if (!function_exists('utf8_decode')) {
     $minorProblems[] = 'Install and enable the <strong>XML</strong> extension.';
 }
 
-if (!function_exists('posix_isatty')) {
-    $minorProblems[] = 'Install and enable the <strong>php_posix</strong> extension (used to colorized the CLI output).';
+if (PHP_OS != 'WINNT' && !function_exists('posix_isatty')) {
+    $minorProblems[] = 'Install and enable the <strong>php_posix</strong> extension (used to colorize the CLI output).';
 }
 
 if (!class_exists('Locale')) {
     $minorProblems[] = 'Install and enable the <strong>intl</strong> extension.';
 }
 
-if (!function_exists('sqlite_open') && !in_array('sqlite', PDO::getAvailableDrivers())) {
-    $majorProblems[] = 'Install and enable the <strong>SQLite</strong> or <strong>PDO_SQLite</strong> extension.';
+if (!class_exists('SQLite3') && !in_array('sqlite', PDO::getAvailableDrivers())) {
+    $majorProblems[] = 'Install and enable the <strong>SQLite3</strong> or <strong>PDO_SQLite</strong> extension.';
+}
+
+if (!function_exists('json_encode')) {
+    $majorProblems[] = 'Install and enable the <strong>json</strong> extension.';
 }
 
 // php.ini
@@ -119,7 +125,7 @@ if (ini_get('session.auto_start')) {
                 <div class="symfony-block-content">
                     <h1>Welcome!</h1>
                     <p>Welcome to your new Symfony project.</p>
-                    <p>This script will guide you through the basic configuration of your project. You can also do the same by editing the ‘<strong>app/parameters.ini</strong>’ file directly.</p>
+                    <p>This script will guide you through the basic configuration of your project. You can also do the same by editing the ‘<strong>app/config/parameters.ini</strong>’ file directly.</p>
 
                     <?php if (count($majorProblems)): ?>
                         <h2>
@@ -134,13 +140,13 @@ if (ini_get('session.auto_start')) {
                     <?php endif ?>
 
                     <?php if (count($minorProblems)): ?>
-                        <h2>Recommandations</h2>
+                        <h2>Recommendations</h2>
                         <p>
                             <?php if ($majorProblems): ?>
                                 Additionally, to
                             <?php else: ?>
                                 To<?php endif; ?>
-                            enhance your Symfony experience, it’s recommended that you fixe the following :
+                            enhance your Symfony experience, it’s recommended that you fix the following :
                         </p>
                         <ol>
                             <?php foreach ($minorProblems as $problem): ?>

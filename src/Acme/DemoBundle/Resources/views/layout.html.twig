@@ -25,6 +25,16 @@
                 </div>
             {% endif %}
 
+            {% block content_header %}
+                <ul id="menu">
+                    {% block content_header_more %}
+                        <li><a href="{{ path('_demo') }}">Demo Home</a></li>
+                    {% endblock %}
+                </ul>
+
+                <div style="clear: both"></div>
+            {% endblock %}
+
             <div class="symfony-content">
                 {% block content %}
                 {% endblock %}

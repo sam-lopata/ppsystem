@@ -3,7 +3,7 @@
 /* FrameworkBundle:Exception:logs.html.twig */
 class __TwigTemplate_40d38aa89946c10799f48ec585b81fe8 extends Twig_Template
 {
-    public function display(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = array())
     {
         $context = array_merge($this->env->getGlobals(), $context);
 
@@ -12,30 +12,17 @@ class __TwigTemplate_40d38aa89946c10799f48ec585b81fe8 extends Twig_Template
     ";
         // line 2
         $context['_parent'] = (array) $context;
-        $context['_seq'] = twig_ensure_traversable($this->getContext($context, 'logs', '2'));
+        $context['_seq'] = twig_ensure_traversable($this->getContext($context, 'logs'));
         foreach ($context['_seq'] as $context['_key'] => $context['log']) {
             // line 3
-            echo "        <li>
+            echo "        <li";
+            if (twig_in_filter($this->getAttribute($this->getContext($context, 'log'), "priorityName", array(), "any", false), array(0 => "EMERG", 1 => "ERR", 2 => "CRIT", 3 => "ALERT", 4 => "ERROR", 5 => "CRITICAL"))) {
+                echo " class=\"error\"";
+            }
+            echo ">
             ";
             // line 4
-            if (("ERR" == $this->getAttribute($this->getContext($context, 'log', '4'), "priorityName", array(), "any", false, 4))) {
-                // line 5
-                echo "                <em>";
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log', '5'), "priorityName", array(), "any", false, 5), "html");
-                echo "</em>
-            ";
-            } else {
-                // line 7
-                echo "                ";
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log', '7'), "priorityName", array(), "any", false, 7), "html");
-                echo "
-            ";
-            }
-            // line 9
-            echo "
-            ";
-            // line 10
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log', '10'), "message", array(), "any", false, 10), "html");
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log'), "message", array(), "any", false), "html");
             echo "
         </li>
     ";
@@ -43,12 +30,18 @@ class __TwigTemplate_40d38aa89946c10799f48ec585b81fe8 extends Twig_Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['log'], $context['_parent'], $context['loop']);
         $context = array_merge($_parent, array_intersect_key($context, $_parent));
-        // line 13
-        echo "</ol>";
+        // line 7
+        echo "</ol>
+";
     }
 
     public function getTemplateName()
     {
         return "FrameworkBundle:Exception:logs.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
     }
 }

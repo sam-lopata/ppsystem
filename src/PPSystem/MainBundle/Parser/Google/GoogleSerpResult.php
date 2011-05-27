@@ -39,7 +39,7 @@ Class GoogleSerpResult
 // -----------------
 // Constructor
 // -----------------
-    public function __construct(DOMElement $result, $position)
+    public function __construct(\DOMElement $result, $position)
     {
         // Assign properties
         $this->position		      = $position + 1;

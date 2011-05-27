@@ -24,14 +24,14 @@ class __TwigTemplate_6f98accaf2c2ce35db8e684acb4656a6 extends Twig_Template
         return $this->parent;
     }
 
-    public function display(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = array())
     {
         $context = array_merge($this->env->getGlobals(), $context);
 
         $this->getParent($context)->display($context, array_merge($this->blocks, $blocks));
     }
 
-    // line 45
+    // line 26
     public function block_panel($context, array $blocks = array())
     {
         echo "";
@@ -44,113 +44,104 @@ class __TwigTemplate_6f98accaf2c2ce35db8e684acb4656a6 extends Twig_Template
         echo "
     ";
         // line 5
-        echo $this->env->getExtension('templating')->renderAction("WebProfilerBundle:Profiler:toolbar", array("token" => $this->getContext($context, 'token', '5'), "position" => "normal"), array());
+        echo $this->env->getExtension('templating')->renderAction("WebProfilerBundle:Profiler:toolbar", array("token" => $this->getContext($context, 'token'), "position" => "normal"), array());
         // line 6
         echo "
     <div id=\"content\">
         ";
         // line 8
-        $template = "WebProfilerBundle:Profiler:header.html.twig";
-        if ($template instanceof Twig_Template) {
-            $template->display(array());
-        } else {
-            echo $this->env->getExtension('templating')->getTemplating()->render($template, array());
-        }
+        $this->env->loadTemplate("WebProfilerBundle:Profiler:header.html.twig")->display(array());
         // line 9
         echo "
-        <div class=\"resume\">
-            <p>
-                <strong><a href=\"";
-        // line 12
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'profiler', '12'), "url", array(), "any", false, 12), "html");
-        echo "\">";
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'profiler', '12'), "url", array(), "any", false, 12), "html");
-        echo "</a></strong>
-                <span class=\"date\">
-                    <strong>by ";
-        // line 14
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'profiler', '14'), "ip", array(), "any", false, 14), "html");
-        echo "</strong> at <strong>";
-        echo twig_escape_filter($this->env, twig_date_format_filter($this->getAttribute($this->getContext($context, 'profiler', '14'), "time", array(), "any", false, 14), "r"), "html");
-        echo "</strong>
-                </span>
-            </p>
-        </div>
-
-        <div class=\"main\">
+        ";
+        // line 10
+        if ((!$this->getAttribute($this->getContext($context, 'profiler'), "isempty", array(), "any", false))) {
+            // line 11
+            echo "            <div id=\"resume\">
+                <p>
+                    <strong><a href=\"";
+            // line 13
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'profiler'), "url", array(), "any", false), "html");
+            echo "\">";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'profiler'), "url", array(), "any", false), "html");
+            echo "</a></strong>
+                    <span class=\"date\">
+                        <strong>by ";
+            // line 15
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'profiler'), "ip", array(), "any", false), "html");
+            echo "</strong> at <strong>";
+            echo twig_escape_filter($this->env, twig_date_format_filter($this->getAttribute($this->getContext($context, 'profiler'), "time", array(), "any", false), "r"), "html");
+            echo "</strong>
+                    </span>
+                </p>
+            </div>
+        ";
+        }
+        // line 20
+        echo "
+        <div id=\"main\">
     
             <div class=\"clear_fix\">
-
-                <div class=\"navigation\">
-            
+                <div id=\"collector_wrapper\">
+                    <div id=\"collector_content\">
+                        ";
+        // line 26
+        $this->displayBlock('panel', $context, $blocks);
+        // line 27
+        echo "                    </div>
+                </div>
+                <div id=\"navigation\">
                     ";
-        // line 25
+        // line 30
         if (twig_test_defined("templates", $context)) {
-            // line 26
-            echo "                        <ul class=\"menu_profiler\">
+            // line 31
+            echo "                        <ul id=\"menu_profiler\">
                             ";
-            // line 27
+            // line 32
             $context['_parent'] = (array) $context;
-            $context['_seq'] = twig_ensure_traversable($this->getContext($context, 'templates', '27'));
+            $context['_seq'] = twig_ensure_traversable($this->getContext($context, 'templates'));
             foreach ($context['_seq'] as $context['name'] => $context['template']) {
-                // line 28
+                // line 33
                 echo "                                ";
                 ob_start();
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'template', '28'), "renderBlock", array("menu", array("collector" => $this->getAttribute($this->getContext($context, 'profiler', '28'), "get", array($this->getContext($context, 'name', '28'), ), "method", false, 28)), ), "method", false, 28), "html");
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'template'), "renderBlock", array("menu", array("collector" => $this->getAttribute($this->getContext($context, 'profiler'), "get", array($this->getContext($context, 'name'), ), "method", false)), ), "method", false), "html");
                 $context['menu'] = new Twig_Markup(ob_get_clean());
-                // line 29
+                // line 34
                 echo "                                ";
-                if (($this->getContext($context, 'menu', '29') != "")) {
-                    // line 30
+                if (($this->getContext($context, 'menu') != "")) {
+                    // line 35
                     echo "                                    <li class=\"";
-                    echo twig_escape_filter($this->env, $this->getContext($context, 'name', '30'), "html");
-                    if (($this->getContext($context, 'name', '30') == $this->getContext($context, 'panel', '30'))) {
+                    echo twig_escape_filter($this->env, $this->getContext($context, 'name'), "html");
+                    if (($this->getContext($context, 'name') == $this->getContext($context, 'panel'))) {
                         echo " selected";
                     }
                     echo "\">
                                         <a href=\"";
-                    // line 31
-                    echo twig_escape_filter($this->env, $this->env->getExtension('templating')->getPath("_profiler_panel", array("token" => $this->getContext($context, 'token', '31'), "panel" => $this->getContext($context, 'name', '31'))), "html");
+                    // line 36
+                    echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_profiler", array("token" => $this->getContext($context, 'token'), "panel" => $this->getContext($context, 'name'))), "html");
                     echo "\">";
-                    echo $this->getContext($context, 'menu', '31');
+                    echo $this->getContext($context, 'menu');
                     echo "</a>
                                     </li>
                                 ";
                 }
-                // line 34
+                // line 39
                 echo "                            ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['name'], $context['template'], $context['_parent'], $context['loop']);
             $context = array_merge($_parent, array_intersect_key($context, $_parent));
-            // line 35
+            // line 40
             echo "                        </ul>
                     ";
         }
-        // line 37
-        echo "
-                    ";
-        // line 38
-        echo $this->env->getExtension('templating')->renderAction("WebProfilerBundle:Profiler:searchBar", array("token" => $this->getContext($context, 'token', '38')), array());
-        // line 39
-        echo "                    
-                    ";
-        // line 40
-        $template = "WebProfilerBundle:Profiler:admin.html.twig";
-        if ($template instanceof Twig_Template) {
-            $template->display(array("token" => $this->getContext($context, 'token', '40')));
-        } else {
-            echo $this->env->getExtension('templating')->getTemplating()->render($template, array("token" => $this->getContext($context, 'token', '40')));
-        }
-        // line 41
-        echo "
-                </div>
-
-                <div class=\"collector_content\">
-                    ";
-        // line 45
-        $this->displayBlock('panel', $context, $blocks);
-        // line 46
+        // line 42
+        echo "                    ";
+        echo $this->env->getExtension('templating')->renderAction("WebProfilerBundle:Profiler:searchBar", array(), array());
+        // line 43
+        echo "                    ";
+        $this->env->loadTemplate("WebProfilerBundle:Profiler:admin.html.twig")->display(array("token" => $this->getContext($context, 'token')));
+        // line 44
         echo "                </div>
             </div>
         </div>
@@ -161,5 +152,10 @@ class __TwigTemplate_6f98accaf2c2ce35db8e684acb4656a6 extends Twig_Template
     public function getTemplateName()
     {
         return "WebProfilerBundle:Profiler:layout.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
     }
 }

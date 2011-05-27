@@ -14,7 +14,7 @@ class __TwigTemplate_601ca4b1ee8d4e1b040a79c185aabffb extends Twig_Template
         );
     }
 
-    public function display(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = array())
     {
         $context = array_merge($this->env->getGlobals(), $context);
 
@@ -23,50 +23,51 @@ class __TwigTemplate_601ca4b1ee8d4e1b040a79c185aabffb extends Twig_Template
 <html>
     <head>
         <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+        <meta name=\"robots\" content=\"noindex,nofollow\" />
         <title>";
-        // line 5
+        // line 6
         $this->displayBlock('title', $context, $blocks);
         echo "</title>
         <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"";
-        // line 6
+        // line 7
         echo twig_escape_filter($this->env, $this->env->getExtension('templating')->getAssetUrl("bundles/webprofiler/favicon.ico"), "html");
         echo "\" />
         ";
-        // line 7
+        // line 8
         $this->displayBlock('head', $context, $blocks);
-        // line 11
+        // line 12
         echo "    </head>
     <body>
         ";
-        // line 13
-        $this->displayBlock('body', $context, $blocks);
         // line 14
+        $this->displayBlock('body', $context, $blocks);
+        // line 15
         echo "    </body>
 </html>
 ";
     }
 
-    // line 5
+    // line 6
     public function block_title($context, array $blocks = array())
     {
         echo "Profiler";
     }
 
-    // line 7
+    // line 8
     public function block_head($context, array $blocks = array())
     {
-        // line 8
+        // line 9
         echo "            <link href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('templating')->getAssetUrl("bundles/webprofiler/css/toolbar.css"), "html");
         echo "\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />
             <link href=\"";
-        // line 9
+        // line 10
         echo twig_escape_filter($this->env, $this->env->getExtension('templating')->getAssetUrl("bundles/webprofiler/css/profiler.css"), "html");
         echo "\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />
         ";
     }
 
-    // line 13
+    // line 14
     public function block_body($context, array $blocks = array())
     {
         echo "";
@@ -75,5 +76,10 @@ class __TwigTemplate_601ca4b1ee8d4e1b040a79c185aabffb extends Twig_Template
     public function getTemplateName()
     {
         return "WebProfilerBundle:Profiler:base.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
     }
 }

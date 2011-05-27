@@ -78,7 +78,7 @@ Class GoogleSerpResultSet implements \SeekableIterator
     public function current()
     {
         // Return an instance of result Object
-		return new Google_Serp_Result($this->results->item($this->currentIndex), $this->currentIndex);
+		return new GoogleSerpResult($this->results->item($this->currentIndex), $this->currentIndex);
     }
 
 

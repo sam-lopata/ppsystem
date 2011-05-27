@@ -10,6 +10,7 @@ class __TwigTemplate_dec9ae3865c823e2c5934ead45b6727f extends Twig_Template
         parent::__construct($env);
 
         $this->blocks = array(
+            'title' => array($this, 'block_title'),
             'body' => array($this, 'block_body'),
         );
     }
@@ -17,13 +18,13 @@ class __TwigTemplate_dec9ae3865c823e2c5934ead45b6727f extends Twig_Template
     public function getParent(array $context)
     {
         if (null === $this->parent) {
-            $this->parent = $this->env->loadTemplate("FrameworkBundle:Exception:layout.html.twig");
+            $this->parent = $this->env->loadTemplate("FrameworkBundle::layout.html.twig");
         }
 
         return $this->parent;
     }
 
-    public function display(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = array())
     {
         $context = array_merge($this->env->getGlobals(), $context);
 
@@ -31,20 +32,34 @@ class __TwigTemplate_dec9ae3865c823e2c5934ead45b6727f extends Twig_Template
     }
 
     // line 3
-    public function block_body($context, array $blocks = array())
+    public function block_title($context, array $blocks = array())
     {
         // line 4
         echo "    ";
-        $template = "FrameworkBundle:Exception:exception.html.twig";
-        if ($template instanceof Twig_Template) {
-            $template->display($context);
-        } else {
-            echo $this->env->getExtension('templating')->getTemplating()->render($template, $context);
-        }
+        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'exception'), "message", array(), "any", false), "html");
+        echo " (";
+        echo twig_escape_filter($this->env, $this->getContext($context, 'status_code'), "html");
+        echo " ";
+        echo twig_escape_filter($this->env, $this->getContext($context, 'status_text'), "html");
+        echo ")
+";
+    }
+
+    // line 7
+    public function block_body($context, array $blocks = array())
+    {
+        // line 8
+        echo "    ";
+        $this->env->loadTemplate("FrameworkBundle:Exception:exception.html.twig")->display($context);
     }
 
     public function getTemplateName()
     {
         return "FrameworkBundle:Exception:exception_full.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
     }
 }

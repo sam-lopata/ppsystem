@@ -3,24 +3,39 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}PPSystem{% endblock %}</title>
+        <link href="{{ asset('css/reset.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
     </head>
     <body>
-
-            {% if app.session.flash('notice') %}
-                <div class="flash-message">
-                    <em>Notice</em>: {{ app.session.flash('notice') }}
-                </div>
-            {% endif %}
-
-            <div class="symfony-content">
-                {% block content %}
-                {% endblock %}
+        <div id="sidebar">
+            {% block sidebar %}
+            <dl>
+                <dt><a href="{{ path('main') }}">Home</a></dt>
+                <dt><a href="{{ path('domain') }}">Domain utilites</a></dt>
+                <dd><a href="{{ path('domain') }}">Pages in SERP</a></dd>
+                <dd><a href="{{ path('domain') }}">Backlinks</a></dd>
+                <dd><a href="{{ path('domain') }}">Google PR</a></dd>
+                <dd><a href="{{ path('domain') }}">Alexa Rank</a></dd>
+                
+            </dl>
+            {% endblock %}
+        </div>    
+        
+        {% if app.session.flash('notice') %}
+            <div class="flash-message">
+                <em>Notice</em>: {{ app.session.flash('notice') }}
             </div>
+        {% endif %}
 
-            {% if code is defined %}
-                <h2>Code behind this page</h2>
-                <div class="symfony-content">{{ code|raw }}</div>
-            {% endif %}
+        <div id="content">
+            {% block content %}
+            {% endblock %}
         </div>
+
+        {% if code is defined %}
+            <h2>Code behind this page</h2>
+            <div class="symfony-content">{{ code|raw }}</div>
+        {% endif %}
+            
     </body>
 </html>

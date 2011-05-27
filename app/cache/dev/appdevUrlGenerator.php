@@ -1,5 +1,9 @@
 <?php
 
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+
 /**
  * appdevUrlGenerator
  *
@@ -8,9 +12,14 @@
  */
 class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerator
 {
-    static protected $declaredRouteNames = array(
+    static private $declaredRouteNames = array(
        '_welcome' => true,
-       'main' => true,
+       '_demo_login' => true,
+       '_security_check' => true,
+       '_demo_logout' => true,
+       'acme_demo_secured_hello' => true,
+       '_demo_secured_hello' => true,
+       '_demo_secured_hello_admin' => true,
        '_demo' => true,
        '_demo_hello' => true,
        '_demo_contact' => true,
@@ -21,25 +30,25 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
        '_profiler_export' => true,
        '_profiler_search_results' => true,
        '_profiler' => true,
-       '_profiler_panel' => true,
        '_configurator_home' => true,
        '_configurator_step' => true,
        '_configurator_final' => true,
+       'main' => true,
+       'domain' => true,
     );
 
     /**
      * Constructor.
      */
-    public function __construct(array $context = array(), array $defaults = array())
+    public function __construct(RequestContext $context)
     {
         $this->context = $context;
-        $this->defaults = $defaults;
     }
 
-    public function generate($name, array $parameters, $absolute = false)
+    public function generate($name, array $parameters = array(), $absolute = false)
     {
         if (!isset(self::$declaredRouteNames[$name])) {
-            throw new \InvalidArgumentException(sprintf('Route "%s" does not exist.', $name));
+            throw new RouteNotFoundException(sprintf('Route "%s" does not exist.', $name));
         }
 
         $escapedName = str_replace('.', '__', $name);
@@ -49,83 +58,113 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
         return $this->doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $absolute);
     }
 
-    protected function get_welcomeRouteInfo()
+    private function get_welcomeRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Acme\\DemoBundle\\Controller\\WelcomeController::indexAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => '',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\WelcomeController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/',  ),));
     }
 
-    protected function getmainRouteInfo()
+    private function get_demo_loginRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'PPSystem\\MainBundle\\Controller\\MainController::indexAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => '',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => 'ppsystem',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\SecuredController::loginAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/demo/secured/login',  ),));
     }
 
-    protected function get_demoRouteInfo()
+    private function get_security_checkRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::indexAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'demo',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_demo',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\SecuredController::securityCheckAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/demo/secured/login_check',  ),));
     }
 
-    protected function get_demo_helloRouteInfo()
+    private function get_demo_logoutRouteInfo()
     {
-        return array(array (  'name' => '{name}',), array_merge($this->defaults, array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::helloAction',)), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '{name}',    3 => 'name',  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => 'hello',    3 => NULL,  ),  2 =>   array (    0 => 'text',    1 => '/',    2 => '_demo',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\SecuredController::logoutAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/demo/secured/logout',  ),));
     }
 
-    protected function get_demo_contactRouteInfo()
+    private function getacme_demo_secured_helloRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::contactAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'contact',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_demo',    3 => NULL,  ),));
+        return array(array (), array (  'name' => 'World',  '_controller' => 'Acme\\DemoBundle\\Controller\\SecuredController::helloAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/demo/secured/hello',  ),));
     }
 
-    protected function get_wdtRouteInfo()
+    private function get_demo_secured_helloRouteInfo()
     {
-        return array(array (  'token' => '{token}',), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::toolbarAction',)), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '{token}',    3 => 'token',  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_wdt',    3 => NULL,  ),));
+        return array(array (  0 => 'name',), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\SecuredController::helloAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'name',  ),  1 =>   array (    0 => 'text',    1 => '/demo/secured/hello',  ),));
     }
 
-    protected function get_profiler_searchRouteInfo()
+    private function get_demo_secured_hello_adminRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::searchAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'search',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (  0 => 'name',), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\SecuredController::helloadminAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'name',  ),  1 =>   array (    0 => 'text',    1 => '/demo/secured/hello/admin',  ),));
     }
 
-    protected function get_profiler_purgeRouteInfo()
+    private function get_demoRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::purgeAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'purge',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/demo/',  ),));
     }
 
-    protected function get_profiler_importRouteInfo()
+    private function get_demo_helloRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::importAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'import',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (  0 => 'name',), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::helloAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'name',  ),  1 =>   array (    0 => 'text',    1 => '/demo/hello',  ),));
     }
 
-    protected function get_profiler_exportRouteInfo()
+    private function get_demo_contactRouteInfo()
     {
-        return array(array (  'token' => '{token}',), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::exportAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '.',    2 => 'txt',    3 => NULL,  ),  1 =>   array (    0 => 'variable',    1 => '/',    2 => '{token}',    3 => 'token',  ),  2 =>   array (    0 => 'text',    1 => '/',    2 => 'export',    3 => NULL,  ),  3 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::contactAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/demo/contact',  ),));
     }
 
-    protected function get_profiler_search_resultsRouteInfo()
+    private function get_wdtRouteInfo()
     {
-        return array(array (  'token' => '{token}',), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::searchResultsAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'results',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => 'search',    3 => NULL,  ),  2 =>   array (    0 => 'variable',    1 => '/',    2 => '{token}',    3 => 'token',  ),  3 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (  0 => 'token',), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::toolbarAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'token',  ),  1 =>   array (    0 => 'text',    1 => '/_wdt',  ),));
     }
 
-    protected function get_profilerRouteInfo()
+    private function get_profiler_searchRouteInfo()
     {
-        return array(array (  'token' => '{token}',), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::panelAction',)), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '{token}',    3 => 'token',  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::searchAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_profiler/search',  ),));
     }
 
-    protected function get_profiler_panelRouteInfo()
+    private function get_profiler_purgeRouteInfo()
     {
-        return array(array (  'token' => '{token}',  'panel' => '{panel}',), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::panelAction',)), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '{panel}',    3 => 'panel',  ),  1 =>   array (    0 => 'variable',    1 => '/',    2 => '{token}',    3 => 'token',  ),  2 =>   array (    0 => 'text',    1 => '/',    2 => '_profiler',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::purgeAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_profiler/purge',  ),));
     }
 
-    protected function get_configurator_homeRouteInfo()
+    private function get_profiler_importRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Controller\\ConfiguratorController::checkAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => '',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_configurator',    3 => NULL,  ),));
+        return array(array (), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::importAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_profiler/import',  ),));
     }
 
-    protected function get_configurator_stepRouteInfo()
+    private function get_profiler_exportRouteInfo()
     {
-        return array(array (  'index' => '{index}',), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Controller\\ConfiguratorController::stepAction',)), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '{index}',    3 => 'index',  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => 'step',    3 => NULL,  ),  2 =>   array (    0 => 'text',    1 => '/',    2 => '_configurator',    3 => NULL,  ),));
+        return array(array (  0 => 'token',), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::exportAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '.txt',  ),  1 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/\\.]+?',    3 => 'token',  ),  2 =>   array (    0 => 'text',    1 => '/_profiler/export',  ),));
     }
 
-    protected function get_configurator_finalRouteInfo()
+    private function get_profiler_search_resultsRouteInfo()
     {
-        return array(array (), array_merge($this->defaults, array (  '_controller' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Controller\\ConfiguratorController::finalAction',)), array (), array (  0 =>   array (    0 => 'text',    1 => '/',    2 => 'final',    3 => NULL,  ),  1 =>   array (    0 => 'text',    1 => '/',    2 => '_configurator',    3 => NULL,  ),));
+        return array(array (  0 => 'token',), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::searchResultsAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/search/results',  ),  1 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'token',  ),  2 =>   array (    0 => 'text',    1 => '/_profiler',  ),));
+    }
+
+    private function get_profilerRouteInfo()
+    {
+        return array(array (  0 => 'token',), array (  '_controller' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController::panelAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'token',  ),  1 =>   array (    0 => 'text',    1 => '/_profiler',  ),));
+    }
+
+    private function get_configurator_homeRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Controller\\ConfiguratorController::checkAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_configurator/',  ),));
+    }
+
+    private function get_configurator_stepRouteInfo()
+    {
+        return array(array (  0 => 'index',), array (  '_controller' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Controller\\ConfiguratorController::stepAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'index',  ),  1 =>   array (    0 => 'text',    1 => '/_configurator/step',  ),));
+    }
+
+    private function get_configurator_finalRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Symfony\\Bundle\\WebConfiguratorBundle\\Controller\\ConfiguratorController::finalAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_configurator/final',  ),));
+    }
+
+    private function getmainRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'PPSystem\\MainBundle\\Controller\\MainController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/ppsystem/',  ),));
+    }
+
+    private function getdomainRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'PPSystem\\MainBundle\\Controller\\DomainController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/ppsystem/domain',  ),));
     }
 }

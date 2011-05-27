@@ -2,15 +2,29 @@
 
 namespace PPSystem\MainBundle\Form;
 
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\TextField;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilder;
 
-class SearchForm extends Form
+class SearchForm extends AbstractType
 {
-    public $query;
-
-    public function configure()
+    
+    public function buildForm(FormBuilder $builder, array $options)
     {
-        $this->add(new TextField('query'));
+        $builder->add('query');
+        $builder->add('tmp', 'text', array('required' => false));
+        //$builder->add('price', 'money', array('currency' => 'USD'));
     }
+    
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'data_class' => 'PPSystem\MainBundle\Entity\SearchCriteria',
+        );
+    } 
+    
+    public function getName()
+    {
+        return "SearchForm";
+    }
+    
 }

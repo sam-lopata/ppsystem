@@ -1,4 +1,8 @@
 main:
     pattern: /
-    defaults: { _controller: PPSystemMainBundle:Main:index }    
+    defaults: { _controller: PPSystemMainBundle:Main:index }
+    
+domain:
+    pattern: /domain
+    defaults: { _controller: PPSystemMainBundle:Domain:index }        
 

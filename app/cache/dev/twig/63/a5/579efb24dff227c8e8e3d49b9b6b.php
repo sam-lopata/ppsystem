@@ -25,7 +25,7 @@ class __TwigTemplate_63a5579efb24dff227c8e8e3d49b9b6b extends Twig_Template
         return $this->parent;
     }
 
-    public function display(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = array())
     {
         $context = array_merge($this->env->getGlobals(), $context);
 
@@ -41,8 +41,8 @@ class __TwigTemplate_63a5579efb24dff227c8e8e3d49b9b6b extends Twig_Template
         echo "\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />
     ";
         // line 5
-        echo twig_escape_filter($this->env, $this->renderParentBlock("head", $context, $blocks), "html");
-        echo "    
+        echo $this->renderParentBlock("head", $context, $blocks);
+        echo "
 ";
     }
 
@@ -54,12 +54,12 @@ class __TwigTemplate_63a5579efb24dff227c8e8e3d49b9b6b extends Twig_Template
     <span class=\"icon\"><img src=\"";
         // line 10
         echo twig_escape_filter($this->env, $this->env->getExtension('templating')->getAssetUrl("bundles/webprofiler/images/profiler/exception.png"), "html");
-        echo "\" alt=\"\" /></span>
+        echo "\" alt=\"Exception\" /></span>
     <strong>Exception</strong>
     <span class=\"count\">
         ";
         // line 13
-        if ($this->getAttribute($this->getContext($context, 'collector', '13'), "hasexception", array(), "any", false, 13)) {
+        if ($this->getAttribute($this->getContext($context, 'collector'), "hasexception", array(), "any", false)) {
             // line 14
             echo "            <span>1</span>
         ";
@@ -78,15 +78,17 @@ class __TwigTemplate_63a5579efb24dff227c8e8e3d49b9b6b extends Twig_Template
 
     ";
         // line 23
-        if ((!$this->getAttribute($this->getContext($context, 'collector', '23'), "hasexception", array(), "any", false, 23))) {
+        if ((!$this->getAttribute($this->getContext($context, 'collector'), "hasexception", array(), "any", false))) {
             // line 24
-            echo "        <em>No exception was thrown and uncaught during the request.</em>
+            echo "        <p>
+            <em>No exception was thrown and uncaught during the request.</em>
+        </p>
     ";
         } else {
-            // line 26
+            // line 28
             echo "        ";
-            echo $this->env->getExtension('templating')->renderAction("WebProfilerBundle:Exception:show", array("exception" => $this->getAttribute($this->getContext($context, 'collector', '26'), "exception", array(), "any", false, 26), "format" => "html"), array());
-            // line 27
+            echo $this->env->getExtension('templating')->renderAction("WebProfilerBundle:Exception:show", array("exception" => $this->getAttribute($this->getContext($context, 'collector'), "exception", array(), "any", false), "format" => "html"), array());
+            // line 29
             echo "    ";
         }
     }
@@ -94,5 +96,10 @@ class __TwigTemplate_63a5579efb24dff227c8e8e3d49b9b6b extends Twig_Template
     public function getTemplateName()
     {
         return "WebProfilerBundle:Collector:exception.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
     }
 }

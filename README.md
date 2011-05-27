@@ -68,3 +68,12 @@ If you want to use the CLI, a console application is available at
 by running `app/check.php`.
 
 Enjoy!
+
+
+== EverzetJadeBundle ==
+git submodule add git://github.com/everzet/EverzetJadeBundle.git vendor/bundles/Everzet/JadeBundle
+git submodule add git://github.com/everzet/jade.php vendor/jade.php
+
+
+
+

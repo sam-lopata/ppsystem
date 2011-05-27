@@ -1,15 +1,15 @@
 imports:
     - { resource: parameters.ini }
+    - { resource: security.yml }
 
 framework:
-    charset:       UTF-8
-    error_handler: null
-    csrf_protection:
-        enabled: true
-        secret: %csrf_secret%
-    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
-    validation:    { enabled: true, annotations: true }
-    templating:    { engines: ['twig'] } #assets_version: SomeVersionScheme
+    secret:          %secret%
+    charset:         UTF-8
+    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+    form:            true
+    csrf_protection: true
+    validation:      true
+    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     session:
         default_locale: %locale%
         lifetime:       3600
@@ -24,6 +24,12 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
+    filters:
+        cssrewrite: ~
+        # closure:
+        #     jar: %kernel.root_dir%/java/compiler.jar
+        # yui_css:
+        #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
 
 # Doctrine Configuration
 doctrine:
@@ -33,16 +39,18 @@ doctrine:
         dbname:   %database_name%
         user:     %database_user%
         password: %database_password%
-        logging:  %kernel.debug%
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        mappings:
-            AcmeDemoBundle: ~
+        auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport:  %mailer_transport%
-    host:       %mailer_host%
-    username:   %mailer_user%
-    password:   %mailer_password%
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+
+jms_security_extra:
+    secure_controllers:  true
+    secure_all_services: false

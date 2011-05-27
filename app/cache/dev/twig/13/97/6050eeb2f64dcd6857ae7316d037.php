@@ -25,7 +25,7 @@ class __TwigTemplate_13976050eeb2f64dcd6857ae7316d037 extends Twig_Template
         return $this->parent;
     }
 
-    public function display(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = array())
     {
         $context = array_merge($this->env->getGlobals(), $context);
 
@@ -36,79 +36,121 @@ class __TwigTemplate_13976050eeb2f64dcd6857ae7316d037 extends Twig_Template
     public function block_toolbar($context, array $blocks = array())
     {
         // line 4
-        echo "<span style=\"white-space:nowrap; color:#2f2f2f; display:inline-block; min-height:24px; border-right:1px solid #cdcdcd; padding:5px 10px 5px 6px; \">
-    <img width=\"15\" height=\"28\" alt=\"Logs\" style=\"vertical-align: middle; margin-right: 10px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAcCAYAAAC+lOV/AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQVJREFUeNpi/P//PwO5gImBAjBwmlm8vLyOf/v2zYJYDVxcXCe2bdvmeu7cuS+M9vb2ZIWYoKDgUrKcvWLFipWfP38OYcEmeeDAgQtA6gMQCzg4OBigy0tISHxhYmJiYMFh+EIgBhlgAMXo4DEwffzH5ewLwAA5ADUAG/g7lBMJNkFgCO8fGJsJxTNezUTEM15nE4rnAQ4wkjVraWm9BlK/wc62tLR8fOXKFZmmpqYHhoaGT4Fif/Do/Q7Ep/bt28fz+/dvDkZgKdI4ZcqUmMOHD0t8+vSJi1gXKCgoPGQE5ixTIBuExUjwKsiSpyDNnECGOBCLAjEnkeEA8vMbxqFZ6AMEGADoe2NON2x5yQAAAABJRU5ErkJggg==\"/>
-    <span>";
-        // line 6
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'collector', '6'), "counterrors", array(), "any", false, 6), "html");
-        echo "</span>
-</span>
-";
+        echo "    ";
+        if ($this->getAttribute($this->getContext($context, 'collector'), "counterrors", array(), "any", false)) {
+            // line 5
+            echo "        ";
+            ob_start();
+            // line 6
+            echo "            <img width=\"15\" height=\"28\" alt=\"Logs\" style=\"border-width: 0; vertical-align: middle; margin-right: 5px;\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAcCAYAAAC+lOV/AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQVJREFUeNpi/P//PwO5gImBAjBwmlm8vLyOf/v2zYJYDVxcXCe2bdvmeu7cuS+M9vb2ZIWYoKDgUrKcvWLFipWfP38OYcEmeeDAgQtA6gMQCzg4OBigy0tISHxhYmJiYMFh+EIgBhlgAMXo4DEwffzH5ewLwAA5ADUAG/g7lBMJNkFgCO8fGJsJxTNezUTEM15nE4rnAQ4wkjVraWm9BlK/wc62tLR8fOXKFZmmpqYHhoaGT4Fif/Do/Q7Ep/bt28fz+/dvDkZgKdI4ZcqUmMOHD0t8+vSJi1gXKCgoPGQE5ixTIBuExUjwKsiSpyDNnECGOBCLAjEnkeEA8vMbxqFZ6AMEGADoe2NON2x5yQAAAABJRU5ErkJggg==\"/>
+        ";
+            $context['icon'] = new Twig_Markup(ob_get_clean());
+            // line 8
+            echo "        ";
+            ob_start();
+            // line 9
+            echo "            <span>";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'collector'), "counterrors", array(), "any", false), "html");
+            echo "</span>
+        ";
+            $context['text'] = new Twig_Markup(ob_get_clean());
+            // line 11
+            echo "        ";
+            $this->env->loadTemplate("WebProfilerBundle:Profiler:toolbar_item.html.twig")->display(array_merge($context, array("link" => $this->getContext($context, 'profiler_url'))));
+            // line 12
+            echo "    ";
+        }
     }
 
-    // line 10
+    // line 15
     public function block_menu($context, array $blocks = array())
     {
-        // line 11
+        // line 16
         echo "<span class=\"label\">
     <span class=\"icon\"><img src=\"";
-        // line 12
+        // line 17
         echo twig_escape_filter($this->env, $this->env->getExtension('templating')->getAssetUrl("bundles/webprofiler/images/profiler/logger.png"), "html");
-        echo "\" alt=\"\" /></span>
+        echo "\" alt=\"Logger\" /></span>
     <strong>Logs</strong>
-    <span class=\"count\">
-        <span>";
-        // line 15
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'collector', '15'), "counterrors", array(), "any", false, 15), "html");
+    ";
+        // line 19
+        if ($this->getAttribute($this->getContext($context, 'collector'), "counterrors", array(), "any", false)) {
+            // line 20
+            echo "        <span class=\"count\">
+            <span>";
+            // line 21
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'collector'), "counterrors", array(), "any", false), "html");
+            echo "</span>
+        </span>
+    ";
+        }
+        // line 24
         echo "</span>
-    </span>
-</span>
 ";
     }
 
-    // line 20
+    // line 27
     public function block_panel($context, array $blocks = array())
     {
-        // line 21
+        // line 28
         echo "    <h2>Logs</h2>
 
     ";
-        // line 23
-        if ($this->getAttribute($this->getContext($context, 'collector', '23'), "logs", array(), "any", false, 23)) {
-            // line 24
+        // line 30
+        if ($this->getAttribute($this->getContext($context, 'collector'), "logs", array(), "any", false)) {
+            // line 31
             echo "        <ul class=\"alt\">
             ";
-            // line 25
+            // line 32
             $context['_parent'] = (array) $context;
-            $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getContext($context, 'collector', '25'), "logs", array(), "any", false, 25));
-            foreach ($context['_seq'] as $context['i'] => $context['log']) {
-                // line 26
+            $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getContext($context, 'collector'), "logs", array(), "any", false));
+            $context['loop'] = array(
+              'parent' => $context['_parent'],
+              'index0' => 0,
+              'index'  => 1,
+              'first'  => true,
+            );
+            if (is_array($context['_seq']) || (is_object($context['_seq']) && $context['_seq'] instanceof Countable)) {
+                $length = count($context['_seq']);
+                $context['loop']['revindex0'] = $length - 1;
+                $context['loop']['revindex'] = $length;
+                $context['loop']['length'] = $length;
+                $context['loop']['last'] = 1 === $length;
+            }
+            foreach ($context['_seq'] as $context['_key'] => $context['log']) {
+                // line 33
                 echo "                <li class=\"";
-                echo ((twig_test_odd($this->getContext($context, 'i', '26'))) ? ("odd") : ("even"));
-                if (("ERR" == $this->getAttribute($this->getContext($context, 'log', '26'), "priorityName", array(), "any", false, 26))) {
+                echo twig_escape_filter($this->env, $this->env->getExtension('core')->getCycle(array(0 => "odd", 1 => "even"), $this->getAttribute($this->getContext($context, 'loop'), "index", array(), "any", false)), "html");
+                if ((("ERR" == $this->getAttribute($this->getContext($context, 'log'), "priorityName", array(), "any", false)) || ("ERROR" == $this->getAttribute($this->getContext($context, 'log'), "priorityName", array(), "any", false)))) {
                     echo " error";
                 }
                 echo "\">
                     ";
-                // line 27
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log', '27'), "priorityName", array(), "any", false, 27), "html");
-                echo "
-                    ";
-                // line 28
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log', '28'), "message", array(), "any", false, 28), "html");
+                // line 34
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, 'log'), "message", array(), "any", false), "html");
                 echo "
                 </li>
             ";
+                ++$context['loop']['index0'];
+                ++$context['loop']['index'];
+                $context['loop']['first'] = false;
+                if (isset($context['loop']['length'])) {
+                    --$context['loop']['revindex0'];
+                    --$context['loop']['revindex'];
+                    $context['loop']['last'] = 0 === $context['loop']['revindex0'];
+                }
             }
             $_parent = $context['_parent'];
-            unset($context['_seq'], $context['_iterated'], $context['i'], $context['log'], $context['_parent'], $context['loop']);
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['log'], $context['_parent'], $context['loop']);
             $context = array_merge($_parent, array_intersect_key($context, $_parent));
-            // line 31
+            // line 37
             echo "        </ul>
     ";
         } else {
-            // line 33
-            echo "        <em>No logs available.</em>
+            // line 39
+            echo "        <p>
+            <em>No logs available.</em>
+        </p>
     ";
         }
     }
@@ -116,5 +158,10 @@ class __TwigTemplate_13976050eeb2f64dcd6857ae7316d037 extends Twig_Template
     public function getTemplateName()
     {
         return "WebProfilerBundle:Collector:logger.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
     }
 }

@@ -54,7 +54,7 @@ Class GoogleSerpScraper
 		$validOptions 	= array(
 						'hl' 		=> 'interfaceLanguage', 	// Validate
 						'btnG'		=> 'btnG',
-						'num'		=> 'results',
+						'results'   => 'num',
 						'oe'		=> 'outputEncoding', 		// Validate
 						'ie'		=> 'inputEncoding', 		// Validate
 						'qdr'		=> 'dateFilter',
@@ -85,6 +85,7 @@ Class GoogleSerpScraper
 		$defaultOptions 	= array(
 							'interfaceLanguage' 	=> 'en',
 							'btnG'					=> 'Search',
+							'num'                   => 5
 //							'sclient'				=> 'psy',
 //							'source'				=> 'hp'
 							);
@@ -114,18 +115,15 @@ Class GoogleSerpScraper
 			$queryString = $this->buildSearchString($query, $options);
 			
 			$resultPage = $this->sendSearch($queryString);
-			
-			var_dump($resultPage);
-			die;
-			
-			$this->processResultsPage($resultPage);
-			
+            
+			$this->processResultsPage($resultPage->getBody());
+            
 			sleep(rand(5,15));
 			
 			$pagesReceived++;
 			$expectedResultsTally = $pagesReceived * $options['results'];
 		}
-		
+        
 		return new GoogleSerpResultSet($this->results);
 	}
 
@@ -187,56 +185,18 @@ Class GoogleSerpScraper
 // -----------------
 	protected function processResultsPage($results)
 	{
-		
-		$html = '<html>
-		<head>
-		</head>
-		<body>
-			<div id="res">
-				<span class="tests"></span>
-				<span class="tests"></span>
-				<span class="tests"></span>
-			</div>
-		</body>
-		</html>';
-
 		$resultPage = new \DOMDocument();
 		
-		$resultPage->loadHTML($html);
-		
-		$xpath = new \DOMXpath($resultPage);
-		
-		foreach ($xpath->query(Parser::cssToXpath('div.res > span.tests')) as $node)
-		{
-		  printf("%s\n", $node->nodeValue);
-		}
-		
-		echo $resultPage->saveHTML();
-		die();
-		
-//		if(!$resultPage->loadHTML($results))
-		if(!$resultPage->loadHTML($html))
-		{
+		if(!@$resultPage->loadHTML($results))
 			throw new \Exception('Failed to load HTML from result page into DOM object')	;
-		}
-		
-		echo $resultPage->saveHTML();
-		die();
 		
 		$xpath = new \DOMXpath($resultPage);
 		
 		// Set estimated total results
-//		$this->results->getElementsByTagName('EstimatedTotalResults')->item(0)->nodeValue = $this->parseEstimatedTotalResults($xpath);
-		
-		$results = $xpath->query(Parser::cssToXpath(''));
-		var_dump($results);
-		
-		die;
+		$this->results->getElementsByTagName('EstimatedTotalResults')->item(0)->nodeValue = $this->parseEstimatedTotalResults($xpath);
+        
 		// Isolate results
-		//$results = $xpath->query('//div[@id="res"]//div[@class="g"]');
-		$results = $xpath->query('//div[@id="ires"]');
-		
-		var_dump($results);
+		$results = $xpath->query(Parser::cssToXpath('div#ires > ol > li.g'));
 		
 		// Parse out each result
 		foreach($results as $result)
@@ -250,7 +210,7 @@ Class GoogleSerpScraper
 			
 			$this->results->getElementsByTagName('ResultSet')->item(0)->appendChild( $resultNode );
 		}
-		
+        
 		$this->resultsTally = $this->results->getElementsByTagName('ResultSet')->length;
 	}
 
@@ -259,9 +219,8 @@ Class GoogleSerpScraper
 // -----------------
 	protected function parseEstimatedTotalResults(\DOMXPath $xpath)
 	{
-		//$estimatedTotalResults = $xpath->query('//table[@class="t bt"]//font//b[3]');
-		$estimatedTotalResults = $xpath->query('//div[@id="resultStats"]');
-		
+		$estimatedTotalResults = $xpath->query(Parser::cssToXpath('div#resultStats'));
+        
 		return $estimatedTotalResults->item(0)->nodeValue;
 	}
 
@@ -270,7 +229,7 @@ Class GoogleSerpScraper
 // -----------------
 	protected function parseTitle(\DOMNode $result)
 	{
-		$title = htmlentities($result->getElementsByTagName('h2')->item(0)->nodeValue);
+		$title = htmlentities($result->getElementsByTagName('h3')->item(0)->nodeValue);
 		
 		return new \DOMElement('Title', $title);
 	}
@@ -280,7 +239,7 @@ Class GoogleSerpScraper
 // -----------------
 	protected function parseLink(\DOMNode $result)
 	{
-		$url = htmlentities($result->getElementsByTagName('h2')->item(0)->getElementsByTagName('a')->item(0)->attributes->getNamedItem('href')->nodeValue);
+		$url = htmlentities($result->getElementsByTagName('h3')->item(0)->getElementsByTagName('a')->item(0)->attributes->getNamedItem('href')->nodeValue);
 		
 		return new \DOMElement('URL', $url);
 	}
@@ -288,16 +247,19 @@ Class GoogleSerpScraper
 // -----------------
 // Parse Summary
 // -----------------
-	protected function parseSummaryText(\DOMNode $result, DOMXPath $xpath)
+	protected function parseSummaryText(\DOMNode $result, \DOMXPath $xpath)
 	{
-		$summary = $xpath->query('.//font[@size = "-1"]', $result);
-		
-		foreach($xpath->query('.//font[@size = "-1"]//a | //span', $result) as $deletes)
+        $summary = $xpath->query(Parser::cssToXpath('div.s'), $result);
+        
+		foreach($xpath->query(Parser::cssToXpath('span.f'), $result) as $deletes)
 		{
 			$replaceArray[] = $deletes->nodeValue;
 		}	
-		
-		$summary = htmlentities(str_replace( $replaceArray, '', $summary->item(0)->nodeValue ));
+        
+        if (is_object($summary) && $summary->item(0) ) 
+            $summary = htmlentities(str_replace($replaceArray, '', $summary->item(0)->nodeValue));
+        else
+            $summary = "No summary";
 		
 		return new \DOMElement('Summary', $summary);
 	}
@@ -305,11 +267,14 @@ Class GoogleSerpScraper
 // -----------------
 // Parse Cache Link
 // -----------------
-	protected function parseCacheLink(\DOMNode $result, DOMXPath $xpath)
+	protected function parseCacheLink(\DOMNode $result, \DOMXPath $xpath)
 	{
-		$cacheLinkResults = $xpath->query('table//nobr/a[. = "Cached"]/@href', $result);
-		
-		$cacheURL = htmlentities($cacheLinkResults->item(0)->nodeValue);
+        $cacheLinkResults = $xpath->query(Parser::cssToXpath('span.gl a'), $result);
+
+        if ($cacheLinkResults && $cacheLinkResults->item(0))
+            $cacheURL = htmlentities($cacheLinkResults->item(0)->getAttribute('href'));
+        else 
+            $cacheURL = 'No cache';          
 		
 		return new \DOMElement('CacheURL', $cacheURL);
 	}
@@ -354,23 +319,7 @@ Class GoogleSerpScraper
 		    return 'Error: ' . $e->getMessage();
 		}
 		
-		
-		// --------------------------!
-		// INSERT WEB REQUEST TO $url HERE
-		// --------------------------!
-		
-		// --------------------------!
-		// Check if the Web request was successful
-		// --------------------------!
-//		if(! )
-//		{
-//			throw new \Exception('Web request to' . $url . 'failed.');	
-//		}
-		
-		// --------------------------!
-		// Return string containing HTML received
-		// --------------------------!
-		return true;
+		return false;
 	}
 	
 // -----------------
