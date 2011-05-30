@@ -1,0 +1,13 @@
+# PPSystem/MainBundle/Resources/views/layout.html.jade
+
+!!! strict
+html
+  head
+    meta( http-equiv:"Content-Type", content="text/html; charset=utf-8" )
+    title
+      - $view['slots']->output('title', 'Hello Application')
+  body
+
+    h1 Hello Application
+
+    - $view['slots']->output('_content')

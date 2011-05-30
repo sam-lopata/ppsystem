@@ -15,6 +15,7 @@ $loader->registerNamespaces(array(
     'Metadata'         => __DIR__.'/../vendor/metadata/src',
     'Acme'             => __DIR__.'/../src',
     'PPSystem'         => __DIR__.'/../src',
+    'Knplabs'          => __DIR__.'/../src'
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',

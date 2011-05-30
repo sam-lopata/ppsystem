@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.ini }
     - { resource: security.yml }
+    - { resource: "@PPSystemMainBundle/Resources/config/menu.xml" }    
 
 framework:
     secret:          %secret%
@@ -54,3 +55,6 @@ swiftmailer:
 jms_security_extra:
     secure_controllers:  true
     secure_all_services: false
+
+knplabs_menu:
+    twig: true

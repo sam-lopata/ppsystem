@@ -1,0 +1,30 @@
+{% extends 'PPSystemMainBundle::layout.html.twig' %}
+
+{% block title %}PPSystem{% endblock %}
+
+{% block content %}
+You searched for: {{ query }}
+<br>
+<form action="" method="post" >
+    {{ form_widget(form) }}
+
+    <input type="submit" />
+</form>
+
+{% if results is defined %}
+<div id="results">
+	{% for item in results %}
+		<div class="oneresult">
+		<b>Title:</b> {{ item.title }} <br />
+		<b>URI:</b>{{ item.url }} <br />
+		<b>Summary:</b>{{ item.summary }} <br />
+		<b>Cache link:</b>{{ item.cacheUrl }} <br />
+		</div>
+		<br /><br />
+	{% else %}
+		No results
+	{% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
