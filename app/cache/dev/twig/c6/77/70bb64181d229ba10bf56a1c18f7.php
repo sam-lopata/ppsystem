@@ -9,7 +9,6 @@ class __TwigTemplate_c67770bb64181d229ba10bf56a1c18f7 extends Twig_Template
 
         $this->blocks = array(
             'title' => array($this, 'block_title'),
-            'sidebar' => array($this, 'block_sidebar'),
             'content' => array($this, 'block_content'),
         );
     }
@@ -40,43 +39,43 @@ class __TwigTemplate_c67770bb64181d229ba10bf56a1c18f7 extends Twig_Template
         <div id=\"sidebar\">
             ";
         // line 11
-        $this->displayBlock('sidebar', $context, $blocks);
-        // line 22
-        echo "        </div>    
+        echo $this->env->getExtension('menu')->render("main");
+        echo "
+        </div>    
         
         ";
-        // line 24
+        // line 14
         if ($this->getAttribute($this->getAttribute($this->getContext($context, 'app'), "session", array(), "any", false), "flash", array("notice", ), "method", false)) {
-            // line 25
+            // line 15
             echo "            <div class=\"flash-message\">
                 <em>Notice</em>: ";
-            // line 26
+            // line 16
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getContext($context, 'app'), "session", array(), "any", false), "flash", array("notice", ), "method", false), "html");
             echo "
             </div>
         ";
         }
-        // line 29
+        // line 19
         echo "
         <div id=\"content\">
             ";
-        // line 31
+        // line 21
         $this->displayBlock('content', $context, $blocks);
-        // line 33
+        // line 23
         echo "        </div>
 
         ";
-        // line 35
+        // line 25
         if (twig_test_defined("code", $context)) {
-            // line 36
+            // line 26
             echo "            <h2>Code behind this page</h2>
             <div class=\"symfony-content\">";
-            // line 37
+            // line 27
             echo $this->getContext($context, 'code');
             echo "</div>
         ";
         }
-        // line 39
+        // line 29
         echo "            
     </body>
 </html>
@@ -89,44 +88,10 @@ class __TwigTemplate_c67770bb64181d229ba10bf56a1c18f7 extends Twig_Template
         echo "PPSystem";
     }
 
-    // line 11
-    public function block_sidebar($context, array $blocks = array())
-    {
-        // line 12
-        echo "            <dl>
-                <dt><a href=\"";
-        // line 13
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("main"), "html");
-        echo "\">Home</a></dt>
-                <dt><a href=\"";
-        // line 14
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("domain"), "html");
-        echo "\">Domain utilites</a></dt>
-                <dd><a href=\"";
-        // line 15
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("domain"), "html");
-        echo "\">Pages in SERP</a></dd>
-                <dd><a href=\"";
-        // line 16
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("domain"), "html");
-        echo "\">Backlinks</a></dd>
-                <dd><a href=\"";
-        // line 17
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("domain"), "html");
-        echo "\">Google PR</a></dd>
-                <dd><a href=\"";
-        // line 18
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("domain"), "html");
-        echo "\">Alexa Rank</a></dd>
-                
-            </dl>
-            ";
-    }
-
-    // line 31
+    // line 21
     public function block_content($context, array $blocks = array())
     {
-        // line 32
+        // line 22
         echo "            ";
     }
 

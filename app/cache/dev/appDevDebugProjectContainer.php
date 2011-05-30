@@ -95,6 +95,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/SensioFrameworkExtraBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/sam/data/www/ppsystem.dev/vendor/bundles/Sensio/Bundle/FrameworkExtraBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/JMSSecurityExtraBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/sam/data/www/ppsystem.dev/vendor/bundles/JMS/SecurityExtraBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'PPSystemMainBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/PPSystemMainBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'PPSystemMainBundle', '/var/www/sam/data/www/ppsystem.dev/src/PPSystem/MainBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'KnplabsMenuBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/KnplabsMenuBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'KnplabsMenuBundle', '/var/www/sam/data/www/ppsystem.dev/src/Knplabs/MenuBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/AcmeDemoBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/sam/data/www/ppsystem.dev/src/Acme/DemoBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/WebProfilerBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/sam/data/www/ppsystem.dev/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Assetic\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SymfonyWebConfiguratorBundle', '/var/www/sam/data/www/ppsystem.dev/app/Resources/SymfonyWebConfiguratorBundle/views', '/^[^.]+\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SymfonyWebConfiguratorBundle', '/var/www/sam/data/www/ppsystem.dev/vendor/bundles/Symfony/Bundle/WebConfiguratorBundle/Resources/views', '/^[^.]+\\.[^.]+\\.twig$/'))), 'twig');
@@ -929,6 +930,40 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'menu.main' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PPSystem\MainBundle\Menu\MainMenu A PPSystem\MainBundle\Menu\MainMenu instance.
+     */
+    protected function getMenu_MainService()
+    {
+        if (!isset($this->scopedServices['request'])) {
+            throw new InactiveScopeException('menu.main', 'request');
+        }
+
+        return $this->services['menu.main'] = $this->scopedServices['request']['menu.main'] = new \PPSystem\MainBundle\Menu\MainMenu($this->get('request'), $this->get('router.real'));
+    }
+
+    /**
+     * Gets the 'menu.provider' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Knplabs\MenuBundle\Provider\LazyProvider A Knplabs\MenuBundle\Provider\LazyProvider instance.
+     */
+    protected function getMenu_ProviderService()
+    {
+        $this->services['menu.provider'] = $instance = new \Knplabs\MenuBundle\Provider\LazyProvider($this);
+
+        $instance->addMenuServiceId('main', 'menu.main');
+
+        return $instance;
+    }
+
+    /**
      * Gets the 'monolog.handler.debug' service.
      *
      * This service is shared.
@@ -1536,9 +1571,22 @@ class appDevDebugProjectContainer extends Container
     {
         $a = new \Symfony\Bundle\FrameworkBundle\Templating\PhpEngine($this->get('templating.name_parser'), $this, $this->get('templating.loader'), $this->get('templating.globals'));
         $a->setCharset('UTF-8');
-        $a->setHelpers(array('slots' => 'templating.helper.slots', 'assets' => 'templating.helper.assets', 'request' => 'templating.helper.request', 'session' => 'templating.helper.session', 'router' => 'templating.helper.router', 'actions' => 'templating.helper.actions', 'code' => 'templating.helper.code', 'translator' => 'templating.helper.translator', 'form' => 'templating.helper.form', 'security' => 'templating.helper.security', 'assetic' => 'assetic.helper.dynamic'));
+        $a->setHelpers(array('slots' => 'templating.helper.slots', 'assets' => 'templating.helper.assets', 'request' => 'templating.helper.request', 'session' => 'templating.helper.session', 'router' => 'templating.helper.router', 'actions' => 'templating.helper.actions', 'code' => 'templating.helper.code', 'translator' => 'templating.helper.translator', 'form' => 'templating.helper.form', 'security' => 'templating.helper.security', 'assetic' => 'assetic.helper.dynamic', 'menu' => 'templating.helper.menu'));
 
         return $this->services['templating.helper.form'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\FormHelper($a);
+    }
+
+    /**
+     * Gets the 'templating.helper.menu' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Knplabs\MenuBundle\Templating\Helper\MenuHelper A Knplabs\MenuBundle\Templating\Helper\MenuHelper instance.
+     */
+    protected function getTemplating_Helper_MenuService()
+    {
+        return $this->services['templating.helper.menu'] = new \Knplabs\MenuBundle\Templating\Helper\MenuHelper($this->get('menu.provider'), $this);
     }
 
     /**
@@ -1742,6 +1790,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\YamlExtension());
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(array(0 => 'TwigBundle:Form:div_layout.html.twig')));
         $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), true, array()));
+        $instance->addExtension(new \Knplabs\MenuBundle\Twig\MenuExtension($this->get('templating.helper.menu')));
         $instance->addExtension($this->get('twig.extension.acme.demo'));
 
         return $instance;
@@ -2297,6 +2346,7 @@ class appDevDebugProjectContainer extends Container
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'JMSSecurityExtraBundle' => 'JMS\\SecurityExtraBundle\\JMSSecurityExtraBundle',
                 'PPSystemMainBundle' => 'PPSystem\\MainBundle\\PPSystemMainBundle',
+                'KnplabsMenuBundle' => 'Knplabs\\MenuBundle\\KnplabsMenuBundle',
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SymfonyWebConfiguratorBundle' => 'Symfony\\Bundle\\WebConfiguratorBundle\\SymfonyWebConfiguratorBundle',
@@ -2314,6 +2364,7 @@ class appDevDebugProjectContainer extends Container
             'mailer_password' => '',
             'locale' => 'en',
             'secret' => '8bf86a02108fc88e417b298ba080bd43aef54bb2',
+            'menu.main.class' => 'PPSystem\\MainBundle\\Menu\\MainMenu',
             'request_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\RequestListener',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
@@ -2643,6 +2694,9 @@ class appDevDebugProjectContainer extends Container
             'security.extra.controller_listener.class' => 'JMS\\SecurityExtraBundle\\Controller\\ControllerListener',
             'security.access.iddqd_voter.class' => 'JMS\\SecurityExtraBundle\\Security\\Authorization\\Voter\\IddqdVoter',
             'security.extra.secure_all_services' => false,
+            'menu.provider.class' => 'Knplabs\\MenuBundle\\Provider\\LazyProvider',
+            'twig.extension.menu.class' => 'Knplabs\\MenuBundle\\Twig\\MenuExtension',
+            'templating.helper.menu.class' => 'Knplabs\\MenuBundle\\Templating\\Helper\\MenuHelper',
             'web_profiler.debug_toolbar.class' => 'Symfony\\Bundle\\WebProfilerBundle\\WebDebugToolbarListener',
             'web_profiler.debug_toolbar.intercept_redirects' => false,
             'web_profiler.debug_toolbar.verbose' => true,
