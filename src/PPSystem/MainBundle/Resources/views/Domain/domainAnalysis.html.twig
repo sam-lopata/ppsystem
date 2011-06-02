@@ -16,16 +16,14 @@
             <table class="serp_results">
                 <tr>
                     <th>Domain</th>
-                    <th>Google index</th>
-                    <th>Google PR</th>
-                    <th>Google mentions</th>
-                    <th>Google Related</th>
-                    <th>Alexa rank</th>
+                    <th>GI</th>
+                    <th>PR</th>
+                    <th>YC</th>
                     <th>DMOZ</th>
+                    <th>Alexa rank</th>
                     <th>Whois</th>
                     <th>DNS</th>
                     <th>Trends</th>
-                    <th>Yandex YC</th>
                     <th>Yahoo backlinks</th>
                 </tr>
             {% for item in results %}
@@ -33,12 +31,11 @@
                     <td>{{ item.fqdn }}</td>
                     <td>{% if item.google.indexed is defined %} {{ item.google.indexed }} {% endif %}</td>
                     <td>{% if item.google.pr is defined %} {{ item.google.pr }} {% endif %}</td>
-                    <td>{% if item.google.mentions is defined %} {{ item.google.mentions }} {% endif %}</td>
-                    <td>{% if item.google.related is defined %} {{ item.google.related }} {% endif %}</td>
-                    <td>{% if item.google.alexa is defined %} {{ item.alexa }} {% endif %}</td>
-                    <td>{% if item.google.dmoz is defined %} {{ item.dmoz }} {% endif %}</td>
-                    <td>{% if item.google.whois is defined %} {{ item.whois }} {% endif %}</td>
-                    <td>{% if item.google.dns is defined %} {{ item.dns }} {% endif %}</td>
+                    <td>{% if item.yandex.yc is defined %} {{ item.yandex.yc }} {% endif %}</td>
+                    <td>{% if item.dmoz is defined %} {{ item.dmoz }} {% endif %}</td>
+                    <td>{% if item.alexa is defined %} {{ item.alexa }} {% endif %}</td>
+                    <td>{% if item.whois is defined %} {{ item.whois }} {% endif %}</td>
+                    <td>{% if item.dns is defined %} {{ item.dns }} {% endif %}</td>
                 </tr>
             {% endfor %}
             </table>

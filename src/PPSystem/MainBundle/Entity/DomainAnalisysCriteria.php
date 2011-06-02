@@ -7,8 +7,26 @@ use Symfony\Component\Validator\Constraints as Assert;
 class DomainAnalisysCriteria
 {
     
-    private $_valid_params = array('pages_indexed', 'pr', 'backlinks', 'alexa', 'related', 'yc', 'dmoz', 'whois', 'dns', 'trends');
-
+    private $_valid_params = array(
+        'google_indexed' => 'Google indexed',
+        'google_pr' => 'Google PR',
+        'google_backlinks' => 'Google Backlinks',
+        'yahoo_indexed' => 'Yahoo indexed',
+        'yahoo_backlinks' => 'Yahoo backlinks',
+        'bing_indexed' => 'Bing indexed',
+        'bing_backlinks' => 'Bing backlinks',
+        'yandex_yc' => 'Yandex YC',
+        'yandex_indexed' => 'Yandex indexed',
+        'yandex_backlinks' => 'Yandex backlinks',
+        'alexa' => 'Alexa Rank',
+        'dmoz' => 'DMOZ',
+        'whois' => 'Whois',
+        'dns' => 'DNS',
+        'google_trends' => 'Trends traff',
+        'google_related' => 'Google related',
+        'google_suggestions' => 'Google related',
+    );
+    
     public $domains;
     
     /**
@@ -18,7 +36,7 @@ class DomainAnalisysCriteria
     
     public function getParametersNames()
     {
-        return $this->_valid_params;
+        return array_keys($this->_valid_params);
     }
     
     private function _assertValidOptions(array $options)
@@ -35,5 +53,5 @@ class DomainAnalisysCriteria
         $this->domains = isset($defaults['query']) ? $defaults['query'] : array();
         $this->parameters = isset($defaults['parameters']) ? (int) $defaults['parameters'] : array();
     }
-
+    
 }

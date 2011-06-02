@@ -64,6 +64,33 @@ class DomainResult
         foreach ($google as $key=>$val) $this->_google[$key] = $val;
     }
     
+    public function setYandex(Array $yandex)
+    {
+        $this->_assertArrayFields($yandex, $this->_yandex);
+        
+        foreach ($yandex as $key=>$val) $this->_yandex[$key] = $val;
+    }
+    
+    public function setDmoz($dmoz)
+    {
+        $this->_dmoz = $dmoz;
+    }
+    
+    public function getDmoz()
+    {
+        return $this->_dmoz;
+    }
+    
+    public function setAlexa($alexa)
+    {
+        $this->_alexa = $alexa;
+    }
+    
+    public function getAlexa()
+    {
+        return $this->_alexa;
+    }
+    
     public function toArray()
     {
         return array(

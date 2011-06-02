@@ -5,6 +5,9 @@ namespace PPSystem\SEParserBundle;
 use PPSystem\SEParserBundle\ParsersManager;
 use PPSystem\SEParserBundle\DomainResult;
 use PPSystem\SEParserBundle\Google\GooglePrChecker;
+use PPSystem\SEParserBundle\Yandex\YandexYcChecker;
+use PPSystem\SEParserBundle\DMOZ\DmozChecker;
+use PPSystem\SEParserBundle\Alexa\AlexaChecker;
 
 /**
  * @todo: implement config loading and saving
@@ -19,12 +22,12 @@ class SEParser {
     
     //Options actions lookup
     private $_options_actions = array(
-        'pages_indexed' => '_parseIndexedPages',
-        'pr' => '_parseGooglePr',
-        'alexa' => '_parse_alexa_rank',
+        'google_indexed' => '_parseIndexedPages',
+        'google_pr' => '_parseGooglePr',
+        'yandex_yc' => '_parseYandexYc',
+        'dmoz' => '_parseDmoz',
+        'alexa' => '_parseAlexaRank',
         'related' => '_parse_related_results',
-        'yc' => '_parse_yc',
-        'dmoz' => '_parse_dmoz',
         'whois' => '_parse_whois',
         'dns' => '_parse_dns',
         'backlinks' => '_parse_backlinks',
@@ -93,7 +96,7 @@ class SEParser {
     {
         $pm = new ParsersManager($se);
         $parser = $pm->getParser();
-        $parser->setDelays(array('min' =>5, 'max'=>10));
+        $parser->setDelays(array('min' =>5, 'max'=>45));
         
         $result = $parser->search($pm->getSitePrefix().$this->_results->getFqdn(), 1, array('results'=>1));
         
@@ -112,5 +115,32 @@ class SEParser {
         $this->_results->setGoogle(array('pr'=>$pr));
     }
     
+    /**
+     * Returns yandex YC
+     */
+    private function _parseYandexYc()
+    {
+        $ycchecker = new YandexYcChecker();
+        $yc = $ycchecker->getTcy($this->_results->getFqdn()); 
+        
+        $this->_results->setYandex(array('yc'=>$yc));
+    }
+    
+    private function _parseDmoz()
+    {
+        $dmozchecker = new DmozChecker();
+        $dmoz= $dmozchecker->getDmoz($this->_results->getFqdn()); 
+        
+        $this->_results->setDmoz($dmoz);
+    }
+    
+    private function _parseAlexaRank()
+    {
+        $alexachecker = new AlexaChecker();
+        $alexa = $alexachecker->getAlexa($this->_results->getFqdn()); 
+        
+        $this->_results->setAlexa($alexa);
+        
+    }
     
 }
