@@ -2,9 +2,6 @@
 
 namespace PPSystem\SEParserBundle\DMOZ;
 
-use PPSystem\SEParserBundle\ParsersManager;
-use PPSystem\SEParserBundle\DomainResult;
-
  /**
   * Class to check is site in DMOZ
   * 

@@ -20,8 +20,9 @@
                     <th>PR</th>
                     <th>YC</th>
                     <th>DMOZ</th>
-                    <th>Alexa rank</th>
+                    <th>Alexa</th>
                     <th>Whois</th>
+                    <th>WebArchive</th>
                     <th>DNS</th>
                     <th>Trends</th>
                     <th>Yahoo backlinks</th>
@@ -32,9 +33,9 @@
                     <td>{% if item.google.indexed is defined %} {{ item.google.indexed }} {% endif %}</td>
                     <td>{% if item.google.pr is defined %} {{ item.google.pr }} {% endif %}</td>
                     <td>{% if item.yandex.yc is defined %} {{ item.yandex.yc }} {% endif %}</td>
-                    <td>{% if item.dmoz is defined %} {{ item.dmoz }} {% endif %}</td>
+                    <td>{% if item.dmoz is defined %} {{ item.dmoz }} {% else %} N/A {% endif %}</td>
                     <td>{% if item.alexa is defined %} {{ item.alexa }} {% endif %}</td>
-                    <td>{% if item.whois is defined %} {{ item.whois }} {% endif %}</td>
+                    <td>{% if item.whois is defined %} {{ item.whois.busy ? 'Busy' : 'Free' }} {% endif %}</td>
                     <td>{% if item.dns is defined %} {{ item.dns }} {% endif %}</td>
                 </tr>
             {% endfor %}

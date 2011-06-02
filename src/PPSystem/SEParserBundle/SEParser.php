@@ -8,6 +8,7 @@ use PPSystem\SEParserBundle\Google\GooglePrChecker;
 use PPSystem\SEParserBundle\Yandex\YandexYcChecker;
 use PPSystem\SEParserBundle\DMOZ\DmozChecker;
 use PPSystem\SEParserBundle\Alexa\AlexaChecker;
+use PPSystem\SEParserBundle\Whois\WhoisChecker;
 
 /**
  * @todo: implement config loading and saving
@@ -27,8 +28,8 @@ class SEParser {
         'yandex_yc' => '_parseYandexYc',
         'dmoz' => '_parseDmoz',
         'alexa' => '_parseAlexaRank',
+        'whois' => '_parseWhois',
         'related' => '_parse_related_results',
-        'whois' => '_parse_whois',
         'dns' => '_parse_dns',
         'backlinks' => '_parse_backlinks',
         'trends' => '_parse_trends'         
@@ -143,4 +144,11 @@ class SEParser {
         
     }
     
+    private function _parseWhois()
+    {
+        $whoischecker = new WhoisChecker();
+        $whois = $whoischecker->checkWhois($this->_results->getFqdn()); 
+        
+        $this->_results->setWhois(array('busy' => $whois->free, 'data' => (!$whois->free) ? $whois->whois : null));
+    }
 }

@@ -32,7 +32,10 @@ class DomainResult
     );
     private $_alexa = null;
     private $_dmoz = null;
-    private $_whois = null;
+    private $_whois = array(
+        'busy' => null,
+        'data' => null
+    );
     private $_dns = null;
         
     private function _assertArrayFields(array $fields, array $validator)
@@ -89,6 +92,17 @@ class DomainResult
     public function getAlexa()
     {
         return $this->_alexa;
+    }
+    
+    public function setWhois(array $whois)
+    {
+        $this->_assertArrayFields($whois, $this->_whois);
+        $this->_whois = $whois;
+    }
+    
+    public function getWhois()
+    {
+        return $this->_whois;
     }
     
     public function toArray()
