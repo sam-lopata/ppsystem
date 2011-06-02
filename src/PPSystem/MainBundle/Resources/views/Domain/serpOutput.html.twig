@@ -1,0 +1,39 @@
+{% extends 'PPSystemMainBundle::layout.html.twig' %}
+{% form_theme form 'PPSystemMainBundle:Form:table_layout.html.twig' %}
+
+{% block title %}PPSystem{% endblock %}
+
+{% block content %}
+    <div class="form">
+        <h3>SERP output</h3>
+        <form action="{{ path('domain_serp') }}" method="post" >
+            {{ form_widget(form, { 'attr': {'class': 'form'} }) }}
+        </form>
+    </div>
+    
+    {% if results is defined %}
+        <span class="info">You searched for: <b>{{ query }}</b></span>
+        <span class="info">Results found: <b>{{ results_count }}</b></span>
+        <span class="info">Total results: <b>{{ results_total }}</b></span>
+        <div id="results">
+            <table class="serp_results">
+                <tr>
+                    <th class="title">Title</th>
+                    <th class="uri">URI</th>
+                    <th class="summary">Summary</th>
+                    <th class="cache">Cache</th>
+                </tr>
+            {% for item in results %}
+                <tr>
+                    <td><a href="{{ item.url }}">{{ item.title }}</a></td>
+                    <td>{{ item.url }}</td>
+                    <td>{{ item.summary }}</td>
+                    <td><a href="{{ item.cacheUrl }}">Cache</a></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <span class="noresults">No results</span>
+    {% endif %}
+{% endblock %}

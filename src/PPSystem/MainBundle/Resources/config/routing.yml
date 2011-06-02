@@ -5,4 +5,12 @@ main:
 domain:
     pattern: /domain
     defaults: { _controller: PPSystemMainBundle:Domain:index }        
+    
+domain_serp:
+    pattern: /domain/serp
+    defaults: { _controller: PPSystemMainBundle:Domain:serpOutput }    
+    
+domain_analysis:
+    pattern: /domain/analysis
+    defaults: { _controller: PPSystemMainBundle:Domain:domainAnalysis }    
 

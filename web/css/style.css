@@ -10,6 +10,11 @@
     padding: 10px 5px;
 }
 
+h3 {
+    font-weight: bold;
+    font-size: 110%;
+}
+
 
 /**
  * Menu 
@@ -31,3 +36,74 @@
 }
 
 
+/**
+ * Forms styles
+ */
+div.form {
+    margin: 10px;
+}
+
+table.form td {
+    padding: 5px 10px 5px 0px;
+    vertical-align: top;
+}
+
+table.form select {
+    margin: 0px;
+}
+
+input[type="submit"], input[type="button"] {
+    padding: 2px 5px;    
+    cursor: pointer;
+}
+
+
+/**
+ * Results table
+ */
+table.serp_results {
+    margin: 5px; 
+}
+
+table.serp_results th {
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    padding: 2px;
+    text-align: left;
+    vertical-align: top;
+    margin-bottom: 10px;
+}
+
+th.title {
+    width: 200px;
+}
+
+th.uri {
+    width: 200px;
+}
+
+th.summary {
+    width: 400px;
+}
+
+table.serp_results td {
+    padding: 2px;
+    margin-bottom: 5px;
+    vertical-align: top;
+    border-bottom: 1px dashed;
+    
+}
+
+
+span.info {
+   margin: 5px; 
+   display: block;
+}
+
+span.checkbox {
+    padding: 2px;
+}
+
+span.checkboxlabel {
+    padding: 2px 2px 2px 5px;
+}

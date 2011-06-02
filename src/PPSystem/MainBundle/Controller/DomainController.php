@@ -3,44 +3,88 @@
 namespace PPSystem\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+//Forms
 use PPSystem\MainBundle\Entity\SearchCriteria;
 use PPSystem\MainBundle\Form\SearchForm;
-use PPSystem\MainBundle\Parser\Google\GoogleSerpScraper;
+use PPSystem\MainBundle\Entity\DomainAnalisysCriteria;
+use PPSystem\MainBundle\Form\DomainAnalisysForm;
+
+//Parser
+use PPSystem\SEParserBundle\SEParser;
 
 class DomainController extends Controller
 {
     public function indexAction()
     {
-        $searchCriteria = new SearchCriteria();
+        $searchCriteria = new SearchCriteria(array('query'=>'Enter query here', 'results'=>10));
         
-        $form = $this->get('form.factory')->create(new SearchForm($searchCriteria));
+        $form = $this->get('form.factory')->create(new SearchForm());
+        $form->setData($searchCriteria);
         
-        $query = "";
+        return $this->render('PPSystemMainBundle:Domain:index.html.twig', array('form' => $form->createView()));
+    }
+
+    public function serpOutputAction()
+    {
+        $searchCriteria = new SearchCriteria(array('query'=>'Enter query here', 'results'=>10));
+        
+        $form = $this->get('form.factory')->create(new SearchForm());
+        $form->setData($searchCriteria);
+        
         $request = $this->get('request');
         
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
             
             if ($form->isValid()) {
-                $formData= $form->getData();
-                $google_serp_scraper = new GoogleSerpScraper('http://www.google.com/');
-                $results = $google_serp_scraper->search($formData->getQuery(), 3);
+                $formData = $form->getData();
+                $google_parser = new SeParser();
+                $results = $google_parser->getSEOutput($formData->getQuery(), $formData->getResults());
                 
-                $this->get('session')->setFlash('notice', 'OK!');
-             
-                return $this->render('PPSystemMainBundle:Domain:index.html.twig', array(
+                return $this->render('PPSystemMainBundle:Domain:serpOutput.html.twig', array(
                     'form' => $form->createView(), 
-                    'query'=>$query,
-                    'results_count'=>$results->totalResults(),
+                    'query'=> $formData->getQuery(),
+                    'results_count' => $results->totalResults(),
+                    'results_total' => $results->totalResultsAvailable,
                     'results' => $results
                 ));    
             }
-            
-            $this->get('session')->setFlash('notice', 'ERROR!');
         }
     
-        return $this->render('PPSystemMainBundle:Domain:index.html.twig', array('form' => $form->createView(), 'query'=>$query));
+        return $this->render('PPSystemMainBundle:Domain:serpOutput.html.twig', array('form' => $form->createView()));
+    } 
+
+    public function domainAnalysisAction()
+    {
+        $DomainAnalisysCriteria = new DomainAnalisysCriteria();
         
+        $form = $this->get('form.factory')->create(new DomainAnalisysForm());
+        
+        $request = $this->get('request');
+        
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            
+            if ($form->isValid()) {
+                $formData = $form->getData();
+                
+                $google_parser = new SEParser();
+
+                $domains = explode("\r\n", $formData->domains);
+                foreach ($domains as $domain) {
+                    $result = $google_parser->analizeDomain($domain, $formData->parameters);
+                    $results[$domain] = $result->toArray();
+                }
+                
+                return $this->render('PPSystemMainBundle:Domain:domainAnalysis.html.twig', array(
+                    'form' => $form->createView(), 
+                    'results' => $results
+                ));    
+            }
+        }
+    
+        return $this->render('PPSystemMainBundle:Domain:domainAnalysis.html.twig', array('form' => $form->createView()));
     }
 
 }

@@ -3,3 +3,5 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ app_dev.php [QSA,L]
 </IfModule>
+
+php_value max_execution_time 0

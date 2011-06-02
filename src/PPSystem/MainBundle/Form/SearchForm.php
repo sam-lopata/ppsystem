@@ -8,11 +8,15 @@ use Symfony\Component\Form\FormBuilder;
 class SearchForm extends AbstractType
 {
     
+    private $results_choices = array(10,20,30,40,50,100,200,500, 1000); 
+    
     public function buildForm(FormBuilder $builder, array $options)
     {
-        $builder->add('query');
-        $builder->add('tmp', 'text', array('required' => false));
-        //$builder->add('price', 'money', array('currency' => 'USD'));
+        $builder->add('query', 'text');
+        $builder->add('results', 'choice', array(
+            'choices'   => array_combine(array_values($this->results_choices), $this->results_choices),
+            'required'  => true,
+        ));
     }
     
     public function getDefaultOptions(array $options)

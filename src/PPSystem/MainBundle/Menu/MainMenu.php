@@ -21,7 +21,8 @@ class MainMenu extends Menu
         $this->addChild('Home', $router->generate('main'));
         
         $domains_section = $this->addChild('Domains utilities', $router->generate('domain'));
-        $domains_section->addChild('Pages in SERP', null, array('class'=>'child-level-1'));
+        $domains_section->addChild('SERP analisys', $router->generate('domain_serp'), array('class'=>'child-level-1'));
+        $domains_section->addChild('Domain analysis', $router->generate('domain_analysis'), array('class'=>'child-level-1'));
         $domains_section->addChild('Backlinks', null, array('class'=>'child-level-1'));
         $domains_section->addChild('Google PR', null, array('class'=>'child-level-1'));
         $domains_section->addChild('Alexa Rank', $router->generate('domain'), array('class'=>'child-level-1'));

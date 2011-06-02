@@ -1,0 +1,70 @@
+{# src/PPSystem/MainBundle/Resources/views/Form/fields.html.twig #}
+{% extends 'PPSystemMainBundle:Form:table_layout.html.twig' %}
+
+{% block field_row %}
+{% spaceless %}
+    <td>
+        {{ form_label(form) }} <br /> 
+        {{ form_widget(form) }} <br />
+        {{ form_errors(form) }}
+    </td>
+{% endspaceless %}
+{% endblock field_row %}
+
+{% block field_rows %}
+{% spaceless %}
+    {{ form_errors(form) }}
+    {% for child in form.children %}
+        {{ form_row(child) }}
+    {% endfor %}
+{% endspaceless %}
+{% endblock field_rows %}
+
+{% block form_widget %}
+{% spaceless %}
+    <table {{ block('container_attributes') }}>
+        <tr>{{ block('field_rows') }}</tr>
+        {{ form_rest(form) }}
+        <tr><td colspan="2"><input type="submit"/></td></tr>
+    </table>
+{% endspaceless %}
+{% endblock form_widget %}
+
+
+{% block choice_widget %}
+{% spaceless %}
+    {% if expanded %}
+        <div {{ block('container_attributes') }}>
+        {% for choice, child in form %}
+            <span class="checkbox">{{ form_widget(child) }}</span> 
+            <span class="checkboxlabel">{{ form_label(child) }}</span> <br />
+        {% endfor %}
+        </div>
+    {% else %}
+    <select {{ block('attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {% if not multiple and not required %}
+            <option value="">{{ empty_value }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('options') }}
+            <option disabled="disabled">{{ separator }}</option>
+        {% endif %}
+        {% set options = choices %}
+        {{ block('options') }}
+    </select>
+    {% endif %}
+{% endspaceless %}
+{% endblock choice_widget %}
+
+{% block checkbox_field %}
+{% spaceless %}
+    <input type="checkbox" {{ block('field_attributes') }}{% if field.hasValue %} value="{{ field.value }}"{% endif %}{% if field.ischecked %} checked="checked"{% endif %} />
+{% endspaceless %}
+{% endblock checkbox_field %}
+
+{% block textarea_widget %}
+{% spaceless %}
+    <textarea cols="40" rows="20" {{ block('attributes') }}>{{ value }}</textarea>
+{% endspaceless %}
+{% endblock textarea_widget %}

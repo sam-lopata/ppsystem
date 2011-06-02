@@ -1,0 +1,49 @@
+{% extends 'PPSystemMainBundle::layout.html.twig' %}
+{% form_theme form 'PPSystemMainBundle:Form:domain_analisys_table_layout.html.twig' %}
+
+{% block title %}PPSystem{% endblock %}
+
+{% block content %}
+    <div class="form">
+        <h3>Domains analysis</h3>
+        <form action="{{ path('domain_analysis') }}" method="post" >
+            {{ form_widget(form, { 'attr': {'class': 'form'} }) }}
+        </form>
+    </div>
+    
+    {% if results is defined %}
+        <div id="results">
+            <table class="serp_results">
+                <tr>
+                    <th>Domain</th>
+                    <th>Google index</th>
+                    <th>Google PR</th>
+                    <th>Google mentions</th>
+                    <th>Google Related</th>
+                    <th>Alexa rank</th>
+                    <th>DMOZ</th>
+                    <th>Whois</th>
+                    <th>DNS</th>
+                    <th>Trends</th>
+                    <th>Yandex YC</th>
+                    <th>Yahoo backlinks</th>
+                </tr>
+            {% for item in results %}
+                <tr>
+                    <td>{{ item.fqdn }}</td>
+                    <td>{% if item.google.indexed is defined %} {{ item.google.indexed }} {% endif %}</td>
+                    <td>{% if item.google.pr is defined %} {{ item.google.pr }} {% endif %}</td>
+                    <td>{% if item.google.mentions is defined %} {{ item.google.mentions }} {% endif %}</td>
+                    <td>{% if item.google.related is defined %} {{ item.google.related }} {% endif %}</td>
+                    <td>{% if item.google.alexa is defined %} {{ item.alexa }} {% endif %}</td>
+                    <td>{% if item.google.dmoz is defined %} {{ item.dmoz }} {% endif %}</td>
+                    <td>{% if item.google.whois is defined %} {{ item.whois }} {% endif %}</td>
+                    <td>{% if item.google.dns is defined %} {{ item.dns }} {% endif %}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <span class="noresults">No results</span>
+    {% endif %}
+{% endblock %}

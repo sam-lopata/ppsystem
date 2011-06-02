@@ -1,0 +1,22 @@
+{# src/PPSystem/MainBundle/Resources/views/Form/fields.html.twig #}
+{% extends 'TwigBundle:Form:table_layout.html.twig' %}
+
+{% block field_row %}
+{% spaceless %}
+        <tr>
+            <td>{{ form_label(form) }}</td>
+            <td>{{ form_widget(form) }}</td>
+            <td>{{ form_errors(form) }}</td>
+        </tr>
+{% endspaceless %}
+{% endblock field_row %}
+
+{% block form_widget %}
+{% spaceless %}
+    <table {{ block('container_attributes') }}>
+        {{ block('field_rows') }}
+        {{ form_rest(form) }}
+        <tr><td></td><td colspan="2"><input type="submit"/></td></tr>
+    </table>
+{% endspaceless %}
+{% endblock form_widget %}
