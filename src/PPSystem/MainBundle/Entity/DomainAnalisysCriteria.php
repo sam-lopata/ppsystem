@@ -7,51 +7,48 @@ use Symfony\Component\Validator\Constraints as Assert;
 class DomainAnalisysCriteria
 {
     
-    private $_valid_params = array(
-        'google_indexed' => 'Google indexed',
-        'google_pr' => 'Google PR',
-        'google_backlinks' => 'Google Backlinks',
-        'yahoo_indexed' => 'Yahoo indexed',
-        'yahoo_backlinks' => 'Yahoo backlinks',
-        'bing_indexed' => 'Bing indexed',
-        'bing_backlinks' => 'Bing backlinks',
-        'yandex_yc' => 'Yandex YC',
-        'yandex_indexed' => 'Yandex indexed',
-        'yandex_backlinks' => 'Yandex backlinks',
-        'alexa' => 'Alexa Rank',
-        'dmoz' => 'DMOZ',
-        'whois' => 'Whois',
-        'dns' => 'DNS',
-        'google_trends' => 'Trends traff',
-        'google_related' => 'Google related',
-        'google_suggestions' => 'Google related',
-    );
-    
-    public $domains;
+    /**
+     * @Assert\Type(type="PPSystem\MainBundle\Entity\GoogleDomainCriteria")
+     */
+    protected $google;
     
     /**
-     * @Assert\Choice(callback = "getParametersNames", multiply = true)
+     * @Assert\Type(type="PPSystem\MainBundle\Entity\YandexDomainCriteria")
      */
-    public $parameters;
+    protected $yandex;
     
-    public function getParametersNames()
-    {
-        return array_keys($this->_valid_params);
-    }
     
-    private function _assertValidOptions(array $options)
-    {
-        foreach ($options as $name => $value)
-            if (!in_array($name, $this->_valid_params)) 
-                throw new \Exception(sprintf('Invalid option key \'%s\' passed', $name));
-    }
+    public $domains;
+    public $alexa;
+    public $dmoz;
+    public $whois;
     
     public function __construct(array $defaults = array())
     {
-        $this->_assertValidOptions($defaults);
-        
-        $this->domains = isset($defaults['query']) ? $defaults['query'] : array();
-        $this->parameters = isset($defaults['parameters']) ? (int) $defaults['parameters'] : array();
+        // $this->domains = isset($defaults['query']) ? $defaults['query'] : array();
+        // $this->domains = isset($defaults['query']) ? $defaults['query'] : array();
+        // $this->google = isset($defaults['google']) ? $defaults['google'] : null;
+        // $this->yandex = isset($defaults['yandex']) ? $defaults['yandex'] : null;
     }
     
+    public function getGoogle()
+    {
+        return $this->google;
+    }
+    
+    public function setGoogle(GoogleDomainCriteria $google)
+    {
+        $this->google = $google;
+    }
+    
+    public function getYandex()
+    {
+        return $this->yandex;
+    }
+    
+    public function setYandex(YandexDomainCriteria $yandex)
+    {
+        $this->yandex = $yandex;
+    }
+   
 }

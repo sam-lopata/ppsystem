@@ -149,6 +149,6 @@ class SEParser {
         $whoischecker = new WhoisChecker();
         $whois = $whoischecker->checkWhois($this->_results->getFqdn()); 
         
-        $this->_results->setWhois(array('busy' => $whois->free, 'data' => (!$whois->free) ? $whois->whois : null));
+        $this->_results->setWhois(array('busy' => !$whois->free, 'data' => (!$whois->free) ? $whois->whois : null));
     }
 }

@@ -64,8 +64,9 @@ class DomainController extends Controller
         $request = $this->get('request');
         
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
             
+            $form->bindRequest($request);
+                       
             if ($form->isValid()) {
                 $formData = $form->getData();
                 
@@ -73,10 +74,10 @@ class DomainController extends Controller
 
                 $domains = explode("\r\n", $formData->domains);
                 foreach ($domains as $domain) {
-                    $result = $google_parser->analizeDomain($domain, $formData->parameters);
+                    $result = $google_parser->analizeDomain($domain, $form->getClientData());
                     $results[$domain] = $result->toArray();
                 }
-                
+
                 return $this->render('PPSystemMainBundle:Domain:domainAnalysis.html.twig', array(
                     'form' => $form->createView(), 
                     'results' => $results

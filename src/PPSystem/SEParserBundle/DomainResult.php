@@ -14,30 +14,44 @@ class DomainResult
         'mentions' => null,
         'related' => null
     );
+    
+    //Yahoo results
     private $_yahoo = array(
         'indexed' => null,
         'backlinks' => null,
         'related' => null
     );
+    
+    //Bing results
     private $_bing = array(
         'indexed' => null,
         'backlinks' => null,
         'related' => null
     );
+    
+    //Yandex results
     private $_yandex = array(
         'indexed' => null,
         'backlinks' => null,
         'related' => null,
         'yc' => null
     );
+    
+    //Alexa rank
     private $_alexa = null;
+    
+    //DMOZ presense flag  
     private $_dmoz = null;
+    
+    //Whois information
     private $_whois = array(
         'busy' => null,
         'data' => null
     );
+    
+    //DNS information
     private $_dns = null;
-        
+
     private function _assertArrayFields(array $fields, array $validator)
     {
         foreach ($fields as $name => $value)

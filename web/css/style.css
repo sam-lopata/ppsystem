@@ -41,6 +41,7 @@ h3 {
  */
 div.form {
     margin: 10px;
+    height: 360px;
 }
 
 table.form td {
@@ -87,7 +88,7 @@ th.summary {
 }
 
 table.serp_results td {
-    padding: 5px;
+    padding: 8px;
     margin-bottom: 5px;
     vertical-align: top;
     border-bottom: 1px dashed;
@@ -104,6 +105,11 @@ span.checkbox {
     padding: 2px;
 }
 
-span.checkboxlabel {
+span.choice_widget, span.choice_label{
     padding: 2px 2px 2px 5px;
 }
+
+span.form_label {
+    
+}
+
