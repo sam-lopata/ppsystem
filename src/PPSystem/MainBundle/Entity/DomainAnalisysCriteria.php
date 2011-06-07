@@ -36,7 +36,7 @@ class DomainAnalisysCriteria
         return $this->google;
     }
     
-    public function setGoogle(GoogleDomainCriteria $google)
+    public function setGoogle(SEDomainCriteria $google)
     {
         $this->google = $google;
     }
@@ -46,7 +46,7 @@ class DomainAnalisysCriteria
         return $this->yandex;
     }
     
-    public function setYandex(YandexDomainCriteria $yandex)
+    public function setYandex(SEDomainCriteria $yandex)
     {
         $this->yandex = $yandex;
     }
